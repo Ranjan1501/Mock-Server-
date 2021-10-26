@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            width: 15%;
+        }
+
+        #operation {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin-top: 0%;
+            margin-left: 6%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="operation">
+
+
+        <div>
+            <h1>Add Products</h1>
+            <input type="number" id="id" placeholder="Id" />
+            <input type="text" id="name" placeholder="Name" />
+            <input type="number" id="price" placeholder="Price" />
+            <button onclick="addProduct()">Add Product</button>
+        </div>
+        <br>
+
+        <div>
+            <h1>Delete Products</h1>
+            <input type="number" id="prod_id" placeholder="Id" />
+            <button onclick="deleteProduct()">Delete Product</button>
+        </div>
+        <br>
+
+        <div>
+            <h1>Update Product</h1>
+            <input type="number" id="new_id" placeholder="Id" />
+            <input type="text" id="new_name" placeholder="description" />
+          
+            <button onclick="updateProduct()">Update Product</button>
+        </div>
+
+    </div>
+</body>
+
+</html>
+<script>
+    //  GET--  Fetch Get Data 
+
+    async function getData() {
+        let res = await fetch(`http://localhost:5000/api/products`)
+        let data = await res.json();
+        console.log("data:", data);
+    }
+
+    getData();
+
+    // POST-  Add Product through form
+    async function addProduct() {
+        let data = {
+            id: document.getElementById("id").value,
+            description: document.getElementById("name").value,
+           
+
+        };
+
+        try {
+            let res = await fetch(`http://localhost:5000/api/products`, {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            let add_data = await res.json();
+            console.log("add_data:", add_data);
+        } catch (error) {               // line-50- 58 are await cdde wrap it under try
+            console.log("error:", error);
+        }
+    }
+
+    //method: DELETE  - Delete Product
+    async function deleteProduct() {
+        let id = document.getElementById("prod_id").value
+        let res = await fetch(`http://localhost:5000/api/products/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+    }
+
+    // method:PUT Update data 
+    async function updateProduct() {
+        let new_data = {
+            id:document.getElementById("new_id").value,
+            name:document.getElementById("new_name").value,
+            price:document.getElementById("new_price").value,
+
+        };
+        try {
+            let res_new = await fetch(`http://localhost:5000/api/products${id}`, {
+                method: "PUT",
+                body: JSON.stringify(new_data),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            let update_data =await res_new.json();
+            console.log("update_data:", update_data);
+
+        } catch (err) {
+            console.log("error", err);
+        }
+    }
+
+
+
+</script>
